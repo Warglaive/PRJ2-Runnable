@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import jfxtras.scene.control.LocalTimePicker?>
+
+<TabPane prefHeight="1024.0" prefWidth="1920.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlanningController">
+  <tabs>
+    <Tab text="Offer Requests">
+         <content>
+            <AnchorPane prefHeight="1012.0" prefWidth="1703.0">
+               <children>
+                  <TableView layoutX="550.0" layoutY="75.0" prefHeight="780.0" prefWidth="780.0">
+                    <columns>
+                      <TableColumn prefWidth="436.3333435058594" text="Company" />
+                      <TableColumn prefWidth="146.6666259765625" text="Date" />
+                        <TableColumn minWidth="0.0" prefWidth="193.33331298828125" text="RequestID" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="880.0" layoutY="880.0" prefHeight="48.0" prefWidth="160.0" text="© Fontys Venlo PRJ2 GRP06" />
+                  <Pane layoutX="549.0" layoutY="22.0" prefHeight="35.0" prefWidth="777.0">
+                     <children>
+                        <TextField fx:id="inputRequestID" layoutX="629.0" layoutY="-1.0" prefHeight="30.0" prefWidth="149.0" promptText="Enter Request ID" />
+                        <ChoiceBox fx:id="requestOpChoiceBox" layoutX="390.0" layoutY="-2.0" prefHeight="30.0" prefWidth="193.0" />
+                     </children>
+                  </Pane>
+                  <Button layoutX="1250.0" layoutY="890.0" mnemonicParsing="false" onAction="#logoutButtonClicked" prefHeight="33.0" prefWidth="79.0" text="Logout" />
+               </children>
+            </AnchorPane>
+         </content></Tab>
+    <Tab fx:id="requestOpOrders" text="Orders">
+         <content>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView layoutX="450.0" layoutY="75.0" prefHeight="780.0" prefWidth="970.0">
+                     <columns>
+                        <TableColumn prefWidth="436.3333435058594" text="Company" />
+                        <TableColumn prefWidth="146.6666259765625" text="Date" />
+                        <TableColumn minWidth="0.0" prefWidth="193.33331298828125" text="OrderID" />
+                        <TableColumn minWidth="0.0" prefWidth="193.33331298828125" text="Status" />
+                     </columns>
+                  </TableView>
+                  <Label layoutX="880.0" layoutY="880.0" prefHeight="48.0" prefWidth="160.0" text="© Fontys Venlo PRJ2 GRP06" />
+                  <Pane layoutX="643.0" layoutY="19.0" prefHeight="35.0" prefWidth="777.0">
+                     <children>
+                        <TextField fx:id="inputRequestID1" layoutX="629.0" layoutY="-1.0" prefHeight="30.0" prefWidth="149.0" promptText="Enter Request ID" />
+                        <ChoiceBox fx:id="ordersOpChoiceBox" layoutX="390.0" layoutY="-2.0" prefHeight="30.0" prefWidth="193.0" />
+                     </children>
+                  </Pane>
+                  <Button layoutX="1340.0" layoutY="890.0" mnemonicParsing="false" onAction="#logoutButtonClicked" prefHeight="33.0" prefWidth="79.0" text="Logout" />
+               </children>
+            </AnchorPane>
+         </content></Tab>
+      <Tab fx:id="" text="Invoices">
+         <content>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView layoutX="450.0" layoutY="75.0" prefHeight="780.0" prefWidth="970.0">
+                     <columns>
+                        <TableColumn prefWidth="436.3333435058594" text="Company" />
+                        <TableColumn prefWidth="146.6666259765625" text="Date" />
+                        <TableColumn minWidth="0.0" prefWidth="193.33331298828125" text="InvoiceID" />
+                        <TableColumn minWidth="0.0" prefWidth="193.33331298828125" text="Status" />
+                     </columns>
+                  </TableView>
+                  <Label layoutX="880.0" layoutY="880.0" prefHeight="48.0" prefWidth="160.0" text="© Fontys Venlo PRJ2 GRP06" />
+                  <Pane layoutX="643.0" layoutY="19.0" prefHeight="35.0" prefWidth="777.0">
+                     <children>
+                        <TextField fx:id="inputRequestID11" layoutX="629.0" layoutY="-1.0" prefHeight="30.0" prefWidth="149.0" promptText="Enter Request ID" />
+                        <ChoiceBox fx:id="invoicesOpChoiceBox" layoutX="390.0" layoutY="-2.0" prefHeight="30.0" prefWidth="193.0" />
+                     </children>
+                  </Pane>
+                  <Button layoutX="1340.0" layoutY="890.0" mnemonicParsing="false" onAction="#logoutButtonClicked" prefHeight="33.0" prefWidth="79.0" text="Logout" />
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Availability">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="truckview" layoutX="32.0" layoutY="403.0" prefHeight="246.0" prefWidth="453.0">
+                    <columns>
+                      <TableColumn fx:id="truckIdColumn" prefWidth="75.0" text="id" />
+                      <TableColumn fx:id="truckLicenseplateColumn" prefWidth="75.0" text="licenseplate" />
+                        <TableColumn fx:id="truckMaxloadweightColumn" prefWidth="101.0" text="maxloadweight" />
+                        <TableColumn fx:id="truckMileageColumn" prefWidth="49.0" text="mileage" />
+                        <TableColumn fx:id="truckPowerColumn" prefWidth="75.0" text="power" />
+                        <TableColumn fx:id="truckApkColumn" prefWidth="75.0" text="apk" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="32.0" layoutY="231.0" prefHeight="26.0" prefWidth="59.0" text="From:" />
+                  <Label layoutX="32.0" layoutY="289.0" text="To:" />
+                  <Button layoutX="497.0" layoutY="431.0" mnemonicParsing="false" onAction="#truckInserCharttButton" prefHeight="36.0" prefWidth="151.0" text="Insert truck into chart" />
+                  <Pane fx:id="paneThePane" layoutX="682.0" layoutY="9.0" prefHeight="515.0" prefWidth="1212.0" />
+                  <TableView fx:id="trailerview" layoutX="32.0" layoutY="670.0" prefHeight="238.0" prefWidth="273.0">
+                    <columns>
+                      <TableColumn fx:id="trailerIdColumn" prefWidth="75.0" text="ID" />
+                      <TableColumn fx:id="trailerLicenseplate" prefWidth="75.0" text="licenseplate" />
+                        <TableColumn fx:id="trailerMaxloadweight" prefWidth="98.0" text="maxloadweight" />
+                    </columns>
+                  </TableView>
+                  <TableView fx:id="driverview" layoutX="567.0" layoutY="671.0" prefHeight="241.0" prefWidth="291.0">
+                    <columns>
+                      <TableColumn fx:id="driverID" prefWidth="75.0" text="ID" />
+                      <TableColumn fx:id="driverEmployeeId" prefWidth="75.0" text="EmployeeID" />
+                        <TableColumn fx:id="driverLicensevalidtill" prefWidth="102.0" text="Licensevalidtill" />
+                    </columns>
+                  </TableView>
+                  <Button layoutX="497.0" layoutY="552.0" mnemonicParsing="false" onAction="#truckUpdateButton" prefHeight="36.0" prefWidth="154.0" text="Update Truck" />
+                  <DatePicker fx:id="datePicker" layoutX="111.0" layoutY="169.0" />
+                  <LocalTimePicker fx:id="from" layoutX="119.0" layoutY="228.0" />
+                  <LocalTimePicker fx:id="to" layoutX="119.0" layoutY="282.0" />
+                  <Label layoutX="34.0" layoutY="173.0" prefHeight="17.0" prefWidth="53.0" text="Date:" />
+                  <TextField fx:id="seriesIdSelector" layoutX="107.0" layoutY="353.0" prefHeight="25.0" prefWidth="25.0" />
+                  <TextField fx:id="dataItemIdSelector" layoutX="248.0" layoutY="353.0" prefHeight="25.0" prefWidth="23.0" />
+                  <Button layoutX="497.0" layoutY="490.0" mnemonicParsing="false" onAction="#truckDeleteButton" prefHeight="36.0" prefWidth="152.0" text="Delete Truck" />
+                  <Button layoutX="285.0" layoutY="347.0" mnemonicParsing="false" onAction="#removeButton" prefHeight="38.0" prefWidth="191.0" text="Remove selected Appointment" />
+                  <Label layoutX="26.0" layoutY="357.0" text="Select entetie" />
+                  <Label layoutX="137.0" layoutY="357.0" text="Select appointment" />
+                  <Button layoutX="497.0" layoutY="606.0" mnemonicParsing="false" onAction="#truckInsertButton" prefHeight="36.0" prefWidth="154.0" text="Insert Truck" />
+                  <Button layoutX="868.0" layoutY="692.0" mnemonicParsing="false" onAction="#driverInserCharttButton" prefHeight="36.0" prefWidth="151.0" text="Insert driver into chart" />
+                  <Button layoutX="868.0" layoutY="753.0" mnemonicParsing="false" onAction="#driverDeleteButton" prefHeight="36.0" prefWidth="152.0" text="Delete Driver" />
+                  <Button layoutX="867.0" layoutY="813.0" mnemonicParsing="false" onAction="#driverUpdateButton" prefHeight="36.0" prefWidth="154.0" text="Update Driver" />
+                  <Button layoutX="867.0" layoutY="872.0" mnemonicParsing="false" onAction="#driverInsertButton" prefHeight="36.0" prefWidth="154.0" text="Insert Driver" />
+                  <Button layoutX="315.0" layoutY="692.0" mnemonicParsing="false" onAction="#trailerInserCharttButton" prefHeight="36.0" prefWidth="151.0" text="Insert trailer into chart" />
+                  <Button layoutX="315.0" layoutY="753.0" mnemonicParsing="false" onAction="#trailerDeleteButton" prefHeight="36.0" prefWidth="152.0" text="Delete Trailer" />
+                  <Button layoutX="314.0" layoutY="813.0" mnemonicParsing="false" onAction="#trailerUpdateButton" prefHeight="36.0" prefWidth="154.0" text="Update Trailer" />
+                  <Button layoutX="314.0" layoutY="872.0" mnemonicParsing="false" onAction="#trailerInsertButton" prefHeight="36.0" prefWidth="154.0" text="Insert Trailer" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+  </tabs>
+</TabPane>

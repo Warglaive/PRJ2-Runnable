@@ -1,0 +1,208 @@
+package controllers;
+
+import entities.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import logic.App;
+import logic.PGDataSource;
+import nl.fontys.sebivenlo.dao.DAO;
+import nl.fontys.sebivenlo.dao.pg.PGDAOFactory;
+
+import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class OrdersInvoicesController implements Initializable {
+    private final int ValueAddedTaxNL = 21;
+    private final float minPrice = 2000;
+    @FXML
+    BorderPane declineOfferBPane;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button showAllBtn;
+
+    @FXML
+    private TableView<Invoice> allInvoicesTableView;
+
+    @FXML
+    private TableColumn id;
+
+    @FXML
+    private TableColumn orderId;
+
+    @FXML
+    private TableColumn isPaid;
+
+    @FXML
+    private TextField customerId;
+
+    @FXML
+    private TextField workOrderId1;
+
+    @FXML
+    private TextField workOrderId2;
+
+    @FXML
+    private TextField workOrderId3;
+
+    @FXML
+    private TextField productId;
+
+    @FXML
+    private TextField orderDate;
+
+    @FXML
+    private TextField isAccepted;
+
+    @FXML
+    private TextField price;
+
+    @FXML
+    private Button createNewOfferBtn;
+
+    private DAO<Integer, Order> orderDAO;
+    private DAO<Integer, Offer> offerDAO;
+    private DAO<Integer, Invoice> invoiceDAO;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //SetValueFactories, nothing else should be here.
+        this.id.setCellValueFactory(new PropertyValueFactory("id"));
+        this.orderId.setCellValueFactory(new PropertyValueFactory<Integer, Invoice>("orderId"));
+        this.isPaid.setCellValueFactory(new PropertyValueFactory<Boolean, Invoice>("isPaid"));
+    }
+
+    public OrdersInvoicesController() {
+        //TableViews initialization
+        this.allInvoicesTableView = new TableView<>();
+        this.allInvoicesTableView.setPlaceholder(new Label("Click the button to retrieve data"));
+        //Buttons initialization
+        this.showAllBtn = new Button();
+        this.createNewOfferBtn = new Button();
+        this.backButton = new Button();
+        this.declineOfferBPane = new BorderPane();
+        //introduce DAO factory
+        PGDAOFactory pdaof = new PGDAOFactory(PGDataSource.DATA_SOURCE);
+        //register mappers
+        pdaof.registerMapper(Invoice.class, new InvoiceMapper());
+        pdaof.registerMapper(Offer.class, new OfferMapper());
+        pdaof.registerMapper(Order.class, new OrderMapper());
+        //create DAOs
+        this.invoiceDAO = pdaof.createDao(Invoice.class);
+        this.offerDAO = pdaof.createDao(Offer.class);
+        //TODO: Find the bug...
+        this.orderDAO = pdaof.createDao(Order.class);
+    }
+
+/*    public void logoutButtonClicked(ActionEvent event) throws IOException {
+        Stage thisWindow = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        thisWindow.close();
+
+        Scene scene = new Scene(loadFXML("LoginUI"));
+        stage.setScene(scene);
+        stage.setTitle("LogistX Planning Software: Login");
+        stage.show();
+
+    }*/
+
+    private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml"));
+        return fxmlLoader.load();
+    }
+
+    //Creates an Offer, order and Invoice objects and inserts them into the DB.
+    public void createOffer(ActionEvent actionEvent) {
+        try {
+            int customerId = Integer.parseInt(this.customerId.getText());
+            int workOrderId1 = Integer.parseInt(this.workOrderId1.getText());
+            int workOrderId2 = Integer.parseInt(this.workOrderId2.getText());
+            int workOrderId3 = Integer.parseInt(this.workOrderId3.getText());
+            int productId = Integer.parseInt(this.productId.getText());
+            //Take the date in the correct format
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate orderDate = LocalDate.parse(this.orderDate.getText(), dateTimeFormatter);
+            boolean isAccepted = Boolean.parseBoolean(this.isAccepted.getText());
+            Float price = Float.parseFloat(this.price.getText());
+            //Offer's Price validation
+            boolean isPaid = false;
+
+            if (price < this.minPrice) {
+                isAccepted = false;
+            } else {
+                isPaid = true;
+            }
+            //ID AutoGenerated
+            int id = this.offerDAO.size() + 1;
+            //Add VAT to price and calculate totalPrice
+            float totalPrice = price * this.ValueAddedTaxNL;
+            Offer offer = new Offer(id, customerId, workOrderId1, workOrderId2, workOrderId3, productId, orderDate, isAccepted, totalPrice);
+            try {
+                this.offerDAO.save(offer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //If the OFFER is accepted -> Create new Order
+
+            if (isAccepted) {
+                //isPaid is true because IsAccepted is true and its true because Price is >= minPrice
+                //ID AutoGenerated
+                int IdPKOrder = 1;
+                Order order = new Order(IdPKOrder, offer.getId());
+                //this.orderDAO.save(order);
+                int invoiceId = this.invoiceDAO.size() + 1;
+                Invoice invoice = new Invoice(invoiceId, IdPKOrder, isPaid);
+                this.invoiceDAO.save(invoice);
+            } else {
+                //TODO: Display the view.
+                Stage stage = (Stage) this.declineOfferBPane.getScene().getWindow();
+                stage.close();
+                Scene scene = new Scene(loadFXML("OfferDeclinedUI"));
+                stage.setScene(scene);
+                stage.setTitle("Offer Declined");
+                stage.setResizable(true);
+                stage.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void displayAllInvoices(ActionEvent actionEvent) {
+        List<Invoice> result = this.invoiceDAO.getAll();
+        //Make List to ObservableList
+        ObservableList<Invoice> observableListResult = FXCollections.observableList(result);
+        //Add all the columns to the table View.
+        this.allInvoicesTableView.setItems(observableListResult);
+        // this.allInvoicesTableView.getColumns().add(this.productIdColumn);
+    }
+
+ // public Offer getOfferById(Integer id) {
+ //     //take the invoice by id
+ //     Offer offer = this.offerDAO.get(id);
+ //     return offer;
+ // }
+ // public Invoice getInvoiceById(Integer id){
+ //     Invoice invoice = this.invoiceDAO.get(id);
+ //     return invoice;
+ // }
+
+    public void backToOfferView() throws IOException {
+        loadFXML("OrdersInvoicesUI");
+    }
+}

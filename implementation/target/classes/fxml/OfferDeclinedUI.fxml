@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane prefHeight="354.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OrdersInvoicesController">
+    <children>
+        <BorderPane layoutX="6.0" layoutY="14.0" AnchorPane.bottomAnchor="67.55999755859375" AnchorPane.leftAnchor="6.0"
+                    AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="14.0">
+            <center>
+                <ImageView fitHeight="303.0" fitWidth="588.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/declined.jpeg"/>
+                    </image>
+                </ImageView>
+            </center>
+        </BorderPane>
+        <Button fx:id="backButton" layoutX="444.0" layoutY="303.0" mnemonicParsing="false" onAction="#backToOfferView"
+                text="Back to Offer Page." textFill="#9a3131"/>
+    </children>
+</AnchorPane>
